@@ -6,7 +6,6 @@ import logging
 import sys
 import threading
 import time
-import json
 import ast
 
 from six.moves import range
@@ -82,15 +81,39 @@ class _Worker(object):
                     # Continue processing items, don't break, try to process
                     # all items we got back before quitting.
                 else:
-                    if (item['message'] is  None):
-                      batch.log_text(None,  timestamp=item['timestamp'], labels=item['labels'], resource=item['resource'], severity=item['severity'], trace=item['trace'], span_id=item['span_id'], http_request=item['http_request']) 
+                    if (item['message'] is None):
+                        batch.log_text(
+                            None,
+                            timestamp=item['timestamp'],
+                            labels=item['labels'],
+                            resource=item['resource'],
+                            severity=item['severity'],
+                            trace=item['trace'],
+                            span_id=item['span_id'],
+                            http_request=item['http_request'])
                     else:
-                      try:
-                          msg=ast.literal_eval(item['message'])
-                          batch.log_struct(msg,  timestamp=item['timestamp'], labels=item['labels'], resource=item['resource'], severity=item['severity'], trace=item['trace'], span_id=item['span_id'], http_request=item['http_request'])
-                      except Exception as e:
-                        #print("Error " + str(e))
-                        batch.log_text(item['message'],  timestamp=item['timestamp'], labels=item['labels'], resource=item['resource'], severity=item['severity'], trace=item['trace'], span_id=item['span_id'], http_request=item['http_request']) 
+                        try:
+                            msg = ast.literal_eval(item['message'])
+                            batch.log_struct(
+                                msg,
+                                timestamp=item['timestamp'],
+                                labels=item['labels'],
+                                resource=item['resource'],
+                                severity=item['severity'],
+                                trace=item['trace'],
+                                span_id=item['span_id'],
+                                http_request=item['http_request'])
+                        except Exception as e:
+                            # print("Error " + str(e))
+                            batch.log_text(
+                                item['message'],
+                                timestamp=item['timestamp'],
+                                labels=item['labels'],
+                                resource=item['resource'],
+                                severity=item['severity'],
+                                trace=item['trace'],
+                                span_id=item['span_id'],
+                                http_request=item['http_request'])
 
             self._safely_commit_batch(batch)
 
@@ -150,8 +173,8 @@ class _Worker(object):
                 'Failed to send %d pending logs.' % (self._queue.qsize(),),
                 file=sys.stderr)
 
-    def enqueue(self, message,timestamp,severity, resource=None, labels=None,
-                trace=None, span_id=None,http_request=None):
+    def enqueue(self, message, timestamp, severity, resource=None, labels=None,
+                trace=None, span_id=None, http_request=None):
 
         self._queue.put_nowait({
             'message': message,
@@ -182,10 +205,10 @@ class BackgroundThreadTransport(Transport):
         self.worker.start()
 
     def send(self, message, timestamp, severity="INFO", resource=None, labels=None,
-             trace=None, span_id=None,http_request=None):
+             trace=None, span_id=None, http_request=None):
 
-        self.worker.enqueue(message, timestamp=timestamp,severity=severity,resource=resource, labels=labels,
-                            trace=trace, span_id=span_id,http_request=http_request)
+        self.worker.enqueue(message, timestamp=timestamp, severity=severity, resource=resource, labels=labels,
+                            trace=trace, span_id=span_id, http_request=http_request)
 
     def flush(self):
         self.worker.flush()

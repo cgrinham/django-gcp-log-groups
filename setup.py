@@ -11,16 +11,15 @@ with io.open(readme_filename, encoding='utf-8') as readme_file:
 
 
 setuptools.setup(
-    name="flask-gcp-log-groups",
-    version="0.1.0",
-    author="Sal Rashid",
-    author_email="salrashid123@gmail.com",
-    description="Python Flask logging handler to group messages on Google Cloud Platform",
+    name="django-gcp-log-groups",
+    version="0.1.1",
+    author="Christie Grinham",
+    author_email="christiegrinham@gmail.com",
+    description="Python Django logging middleware to group messages on Google Cloud Platform",
     long_description=readme,
-    url="https://github.com/salrashid123/flask-gcp-log-groups",
+    url="https://github.com/christophski/django-gcp-log-groups",
     install_requires=[
           'google-cloud-logging',
-          'flask'
     ],
     packages=setuptools.find_packages(),
     classifiers=[
