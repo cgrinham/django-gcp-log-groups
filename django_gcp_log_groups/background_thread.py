@@ -59,7 +59,6 @@ class _Worker(object):
         try:
             if total_logs > 0:
                 batch.commit()
-                _LOGGER.debug('Submitted %d logs', total_logs)
         except Exception:
             _LOGGER.error(
                 'Failed to submit %d logs.', total_logs, exc_info=True)

@@ -3,7 +3,6 @@ import logging
 import time
 import random
 import os
-
 from google.cloud import logging as gcplogging
 from google.cloud.logging.resource import Resource
 
@@ -15,7 +14,7 @@ LOGGER.setLevel(logging.DEBUG)
 project = os.environ.get("GOOGLE_CLOUD_PROJECT", "")
 client = gcplogging.Client(project=project)
 
-parentLogName = 'request'
+parentLogName = 'request_log'
 childLogName = 'application'
 transport_parent = BackgroundThreadTransport(client, parentLogName)
 transport_child = BackgroundThreadTransport(client, childLogName)
