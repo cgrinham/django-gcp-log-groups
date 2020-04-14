@@ -10,7 +10,7 @@ from .background_thread import BackgroundThreadTransport
 
 
 LOGGER = logging.getLogger()
-LOGGER.setLevel(logging.DEBUG)
+LOGGER.setLevel(logging.INFO)
 project = os.environ.get("GOOGLE_CLOUD_PROJECT", "")
 client = gcplogging.Client(project=project)
 
