@@ -36,7 +36,7 @@ class GCPHandler(logging.Handler):
         SEVERITY = record.levelname
 
         # if the current log is at a lower level than is setup, skip it
-        if (getattr(logging, record.levelname) <= LOGGER.level):
+        if getattr(logging, record.levelname) < LOGGER.level:
             return
         MLOGLEVELS.append(SEVERITY)
 
@@ -106,7 +106,7 @@ class GCPLoggingMiddleware:
         # level to the root log message
         if len(MLOGLEVELS) == 0:
             severity = logging.getLevelName(logging.INFO)
-            if (response.status_code >= 400):
+            if response.status_code >= 400:
                 severity = logging.getLevelName(logging.ERROR)
         else:
             severity = min(MLOGLEVELS)
