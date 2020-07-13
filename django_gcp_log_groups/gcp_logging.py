@@ -71,7 +71,7 @@ class GCPLoggingMiddleware:
         start_time = time.time()
 
         # Add logging handler for this request
-        gcp_handler = GCPHandler(trace=trace, span=span)
+        gcp_handler = GCPHandler(trace=f"projects/{project}/traces/{trace}", span=span)
         gcp_handler.setLevel(logging.DEBUG)
         LOGGER.addHandler(gcp_handler)
 
