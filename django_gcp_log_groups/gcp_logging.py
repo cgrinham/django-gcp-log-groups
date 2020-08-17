@@ -5,6 +5,7 @@ import random
 import os
 from google.cloud import logging as gcplogging
 from google.cloud.logging.resource import Resource
+from django.conf import settings
 
 from .background_thread import BackgroundThreadTransport
 
@@ -13,6 +14,10 @@ LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.INFO)
 project = os.environ.get("GOOGLE_CLOUD_PROJECT", "")
 client = gcplogging.Client(project=project)
+if hasattr(settings, "GCP_LOG_USE_X_HTTP_CLOUD_CONTEXT"):
+    USE_X_HTTP_CLOUD_CONTEXT = settings.GCP_LOG_USE_X_HTTP_CLOUD_CONTEXT
+else:
+    USE_X_HTTP_CLOUD_CONTEXT = False
 
 parentLogName = 'request_log'
 childLogName = 'application'
@@ -56,7 +61,9 @@ class GCPLoggingMiddleware:
 
     def __call__(self, request):
         span = None
-        trace = request.META.get("HTTP_X_CLOUD_TRACE_CONTEXT")
+        trace = None
+        if USE_X_HTTP_CLOUD_CONTEXT:
+            trace = request.META.get("HTTP_X_CLOUD_TRACE_CONTEXT")
         if trace:
             # trace can be formatted as "X-Cloud-Trace-Context:
             # trace/SPAN_ID;o=TRACE_TRUE"
@@ -66,12 +73,12 @@ class GCPLoggingMiddleware:
                 span = rawTrace[1].split(';')[0]
         else:
             chars = "abcdefghijklmnopqrstuvwxyz1234567890"
-            trace = "".join([random.choice(chars) for x in range(0, 16)])
-
+            trace = "".join([random.choice(chars) for x in range(0, 32)])
+        trace = f"projects/{project}/traces/{trace}"
         start_time = time.time()
 
         # Add logging handler for this request
-        gcp_handler = GCPHandler(trace=f"projects/{project}/traces/{trace}", span=span)
+        gcp_handler = GCPHandler(trace=trace, span=span)
         gcp_handler.setLevel(logging.DEBUG)
         LOGGER.addHandler(gcp_handler)
 
