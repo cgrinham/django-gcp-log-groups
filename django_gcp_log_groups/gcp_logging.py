@@ -4,7 +4,6 @@ import time
 import random
 import os
 from google.cloud import logging as gcplogging
-from google.cloud.logging.resource import Resource
 from django.conf import settings
 
 from .background_thread import BackgroundThreadTransport
@@ -24,7 +23,7 @@ childLogName = 'application'
 transport_parent = BackgroundThreadTransport(client, parentLogName)
 transport_child = BackgroundThreadTransport(client, childLogName)
 
-RESOURCE = Resource(type='gae_app', labels={})
+RESOURCE = gcplogging.Resource(type='gae_app', labels={})
 LABELS = None
 MLOGLEVELS = []
 
