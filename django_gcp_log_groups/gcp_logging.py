@@ -3,7 +3,7 @@ import logging
 import time
 import random
 import os
-from google.cloud import logging as gcplogging
+import google.cloud.logging as gcplogging
 from django.conf import settings
 
 from .background_thread import BackgroundThreadTransport

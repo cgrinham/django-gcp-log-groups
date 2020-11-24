@@ -12,7 +12,7 @@ with io.open(readme_filename, encoding='utf-8') as readme_file:
 
 setuptools.setup(
     name="django-gcp-log-groups",
-    version="0.1.2",
+    version="0.1.3",
     author="Christie Grinham",
     author_email="christiegrinham@gmail.com",
     description="Python Django logging middleware to group messages on Google Cloud Platform",

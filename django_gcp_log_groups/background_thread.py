@@ -10,8 +10,8 @@ import ast
 
 from six.moves import range
 from six.moves import queue
+from google.cloud.logging import handlers
 
-from google.cloud.logging.handlers.transports.base import Transport
 
 _DEFAULT_GRACE_PERIOD = 5.0  # Seconds
 _DEFAULT_MAX_BATCH_SIZE = 10
@@ -190,7 +190,7 @@ class _Worker(object):
         self._queue.join()
 
 
-class BackgroundThreadTransport(Transport):
+class BackgroundThreadTransport(handlers.transports.Transport):
 
     def __init__(self, client, name, grace_period=_DEFAULT_GRACE_PERIOD,
                  batch_size=_DEFAULT_MAX_BATCH_SIZE,
