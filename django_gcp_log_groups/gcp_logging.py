@@ -83,7 +83,7 @@ class GCPLoggingMiddleware:
 
         response = self.get_response(request)
 
-        if USE_X_HTTP_CLOUD_CONTEXT:
+        if not USE_X_HTTP_CLOUD_CONTEXT:
             self.make_parent_log(trace, span, request, start_time, response)
 
         # Remove logging handler for this request
