@@ -10,7 +10,7 @@ import ast
 
 from six.moves import range
 from six.moves import queue
-from google.cloud.logging import handlers
+from google.cloud.logging_v2 import handlers
 
 
 _DEFAULT_GRACE_PERIOD = 5.0  # Seconds
