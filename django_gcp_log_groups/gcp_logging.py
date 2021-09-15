@@ -112,8 +112,10 @@ class GCPLoggingMiddleware:
         # level to the root log message
         if len(MLOGLEVELS) == 0:
             severity = logging.getLevelName(logging.INFO)
-            if response.status_code >= 400:
+            if response.status_code >= 500:
                 severity = logging.getLevelName(logging.ERROR)
+            elif response.status_code >= 400:
+                severity = logging.getLevelName(logging.WARNING)
         else:
             severity = min(MLOGLEVELS)
 
